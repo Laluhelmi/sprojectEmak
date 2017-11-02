@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView  xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="match_parent"
+    android:layout_margin="5dp"
+    android:layout_width="match_parent">
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+<TextView
+    android:id="@+id/tprojectname"
+    android:layout_width="wrap_content"
+    android:text="Your Project Name"
+    android:layout_height="wrap_content" />
+    <EditText
+        android:id="@+id/input"
+        android:layout_below="@+id/tprojectname"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <TextView
+        android:id="@+id/tposition"
+        android:text="Your Position In Project"
+        android:layout_below="@+id/input"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <Spinner
+        android:id="@+id/spinner_position"
+        android:layout_below="@+id/tposition"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <TextView
+        android:id="@+id/t_type_your_projet"
+        android:layout_below="@+id/spinner_position"
+        android:text="Type Your Project"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <EditText
+        android:layout_below="@+id/t_type_your_projet"
+        android:id="@+id/input_type_project"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <TextView
+        android:id="@+id/t_man_hours"
+        android:layout_below="@+id/input_type_project"
+        android:layout_width="wrap_content"
+        android:text="Man Hours"
+        android:layout_height="wrap_content" />
+    <Spinner
+        android:layout_below="@+id/t_man_hours"
+        android:id="@+id/spiner_man_hours"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"></Spinner>
+    <TextView
+        android:id="@+id/bla"
+        android:layout_below="@id/spiner_man_hours"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="or Type in here man hours"
+        />
+    <EditText
+        android:id="@+id/input_or_type"
+        android:layout_below="@+id/bla"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+       <TextView
+           android:id="@+id/tworkinghours"
+           android:layout_below="@+id/input_or_type"
+           android:text="Working Hours"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content" />
+    <EditText
+        android:layout_below="@+id/tworkinghours"
+        android:id="@+id/input_working_hours"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <Button
+        android:layout_below="@+id/input_working_hours"
+        android:id="@+id/set_date"
+        android:text="SET DATE"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <Button
+        android:layout_below="@+id/set_date"
+        android:id="@+id/set_time"
+        android:text="SET TIME"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <TextView
+        android:text="Deskription Your Project Here"
+        android:id="@+id/t_deskripsi"
+        android:layout_below="@+id/set_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <EditText
+        android:id="@+id/input_description"
+        android:layout_below="@+id/t_deskripsi"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <Button
+        android:layout_below="@+id/input_description"
+        android:text="Crate"
+        android:id="@+id/create"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <Button
+        android:layout_below="@+id/create"
+        android:text="Close"
+        android:id="@+id/close"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+</RelativeLayout>
+</ScrollView>

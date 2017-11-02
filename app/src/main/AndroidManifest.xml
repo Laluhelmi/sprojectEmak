@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:node="merge"
+    package="prak.com.sproject" >
+    <supports-screens
+
+        android:smallScreens="true"
+        android:normalScreens="true"
+        android:largeScreens="true"
+        android:xlargeScreens="true"
+        android:anyDensity="true"
+        android:resizeable="true"
+        />
+
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/MyMaterialTheme" >
+        <activity
+            android:name=".Splashscreen"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"
+            android:noHistory="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity android:name=".ProfileInfo"
+            android:label="Sproject"
+            android:noHistory="true"
+            >
+            </activity>
+        <activity android:name=".Dashboard"
+            android:label="Sproject"
+            android:noHistory="true"
+            />
+        <activity android:name=".MainActivity"
+            android:label="@string/app_name">
+            </activity>
+        <activity android:name=".Register"
+            android:label="Sproject"
+            android:noHistory="true"
+            />
+        <activity android:name=".Editprofil"
+            android:label="Sproject"
+            />
+        <activity android:name=".AmbilProfile"
+            android:label="Sproject"
+            />
+        <activity android:name=".DetailProject"
+            android:label="Sproject"
+            />
+        <activity android:name=".DetailProjectDoing"
+            android:label="Sproject"
+            />
+        <activity android:name=".DetailProjectDone"
+            android:label="Sproject"
+            />
+
+        <activity android:name=".activity.FixedTab"
+            android:label="Sproject"
+            />
+        <activity android:name=".activity.HistoryDaily"
+            android:label="Sproject"
+            />
+        <activity android:name=".DetailChatHistory"
+            android:label="Sproject"
+            />
+        <service
+            android:name=".FirebaseInstance">
+            <intent-filter>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
+            </intent-filter>
+        </service>
+
+        <service
+            android:name=".MyfireMessagingService">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+            </intent-filter>
+        </service>
+    </application>
+
+</manifest>

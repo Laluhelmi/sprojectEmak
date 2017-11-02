@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<android.support.v4.widget.DrawerLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="#ffffff"
+    android:id="@+id/drawer_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true">
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="vertical" android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:text="Project Detail"
+            android:textColor="#fff"
+            android:textSize="16dp"
+            android:padding="5dp"
+
+            android:gravity="center"
+            android:background="#0099ff"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:orientation="horizontal"
+            android:background="#fff">
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:orientation="vertical"
+                android:layout_weight="1"
+                android:background="#d2d2d0"
+
+                android:id="@+id/todoku">
+
+                <ImageView
+
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="7dp"
+                    android:background="@drawable/todo"/>
+                <TextView
+
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="To Do"
+
+                    android:textSize="12dp"
+
+                    android:textAlignment="center"
+                    android:textColor="#000"/>
+            </LinearLayout>
+
+            <View
+                android:layout_width="0.1dp"
+                android:layout_height="50dp"
+                android:background="#ACACAC"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:orientation="vertical"
+                android:layout_weight="1"
+                android:background="#d2d2d0"
+                android:id="@+id/doing"
+                >
+
+                <ImageView
+
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="7dp"
+                    android:background="@drawable/doing"/>
+
+                <TextView
+
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="D o i n g"
+
+                    android:textSize="12dp"
+
+                    android:textAlignment="center"
+                    android:textColor="#000"/>
+
+            </LinearLayout>
+            <View
+                android:layout_width="0.1dp"
+                android:layout_height="50dp"
+                android:background="#ACACAC"/>
+
+
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:orientation="vertical"
+                android:layout_weight="1"
+
+                android:id="@+id/done">
+
+                <ImageView
+
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="7dp"
+                    android:background="@drawable/done"/>
+
+                <TextView
+
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="D o n e"
+                    android:letterSpacing="0.1"
+                    android:textSize="12dp"
+
+                    android:textAlignment="center"
+                    android:textColor="#000"/>
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="0.1dp"
+                android:layout_height="50dp"
+                android:background="#ACACAC"/>
+
+
+
+
+
+
+
+
+        </LinearLayout>
+        <ListView
+            android:id="@+id/listviewdone"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="0dp"
+            android:background="#EEEEEEEE"
+
+            android:divider="#00000000">
+
+        </ListView>
+
+
+
+
+    </LinearLayout>
+
+    <android.support.design.widget.NavigationView
+        android:id="@+id/navigation"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        app:headerLayout="@layout/view_nav_header"
+        app:itemTextColor="#333"
+        app:itemIconTint="#333"
+        app:menu="@menu/menu_nav_item" />
+
+
+</android.support.v4.widget.DrawerLayout>
