@@ -26,6 +26,7 @@ import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -74,12 +75,12 @@ public class AmbilProfile extends AppCompatActivity{
     String tokenSent,myuser;
     private ImageView imageViewRound;
 
-    ArrayList<BeanClassForListView> data;
+    ArrayList<BeanClassForListView> data = new ArrayList<>();
 
     ArrayList<BeanClassForNotif> datanotif;
 
     DetailNotifAdapter notifAdapter;
-    listViewAdapter listViewAdapter;
+    listViewAdapter listViewAdapter=null;
 
     ArrayAdapter<String> adapter;
     String[] listku,deskripsipro,listkunotif,deskripsinotif;
@@ -91,13 +92,14 @@ public class AmbilProfile extends AppCompatActivity{
     DBHelper db;
     String appserveerurl="http://apiscrum.alfatech.id/index.php/app/recive_token";
     private Button addProject;
-    private EditText input_name,type_project,input_or_type,working_hours,deskription;
-    private Spinner positon,man_hours;
+    private EditText input_name,input_or_type,working_hours,deskription;
+    private Spinner type_project;
+    private Spinner positon;
+    private EditText man_hours;
     private Button setdate,settime,create,close;
-
-    public void definiton(){
-
-    }
+    private int idJenisProject = 1;
+    private String tanggalMulai;
+    private String jamMulai;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -134,30 +136,71 @@ public class AmbilProfile extends AppCompatActivity{
         addProject.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Dialog dialog = new Dialog(AmbilProfile.this);
+                final Dialog dialog = new Dialog(AmbilProfile.this);
                 dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                 dialog.setContentView(R.layout.form_input);
-
+                dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT,
+                        ViewGroup.LayoutParams.WRAP_CONTENT);
                 List<String> positions = new ArrayList<>();
                 positions.add("Scrum Master");
-                positions.add("Produk Owner");
-                positions.add("Deplover Team");
+                positions.add("Product Owner");
+                positions.add("Developer Team");
                 List<String> manHourss = new ArrayList<String>();
                 manHourss.add("20 man");
                 manHourss.add("28 man");
                 manHourss.add("36 man");
 
-                input_name      = (EditText)findViewById(R.id.input);
-                type_project    = (EditText)findViewById(R.id.input_type_project);
-                input_or_type   = (EditText)findViewById(R.id.input_or_type);
-                working_hours   = (EditText)findViewById(R.id.input_working_hours);
-                deskription     = (EditText)findViewById(R.id.input_description);
+                final List<String> typeProject = new ArrayList<>();
+                typeProject.add("web profil");
+                typeProject.add("mobile android");
+                typeProject.add("sistem penerimaan siswa baru");
+                typeProject.add("iphone");
+                typeProject.add("toko buku offline");
+                typeProject.add("sistem informasi");
+                typeProject.add("sistem boking tikets bioskop");
+                typeProject.add("pemesanan");
+                typeProject.add("Lainnya");
+
+
+                input_name      = (EditText)dialog.findViewById(R.id.input);
+                type_project    = (Spinner)dialog.findViewById(R.id.input_type_project);
+                input_or_type   = (EditText)dialog.findViewById(R.id.input_or_type);
+                working_hours   = (EditText)dialog.findViewById(R.id.input_working_hours);
+                deskription     = (EditText)dialog.findViewById(R.id.input_description);
                 positon         = (Spinner)dialog.findViewById(R.id.spinner_position);
-                man_hours       = (Spinner)dialog.findViewById(R.id.spiner_man_hours);
+                man_hours       = (EditText) dialog.findViewById(R.id.spiner_man_hours);
                 setdate         = (Button)dialog.findViewById(R.id.set_date);
                 settime         = (Button)dialog.findViewById(R.id.set_time);
                 create          = (Button)dialog.findViewById(R.id.create);
                 close           = (Button)dialog.findViewById(R.id.close);
+                close.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        dialog.dismiss();
+                    }
+                });
+                create.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Map<String,String> stringStringMap = new HashMap<>();
+                        stringStringMap.put("judul",input_name.getText().toString());
+
+                        if( type_project.getSelectedItem().toString() != "Lainnya")
+                            stringStringMap.put("jenis",  String.valueOf(type_project.getSelectedItemPosition()+1));
+                        else{
+                            stringStringMap.put("man_hours",man_hours.getText().toString());
+                            String jenis = ((EditText)dialog.findViewById(R.id.t_man_hours)).getText().toString();
+                            stringStringMap.put("jenis",  jenis);
+                        }
+                        stringStringMap.put("jabatan",positon.getSelectedItem().toString());
+                        stringStringMap.put("jamkerja" , working_hours.getText().toString());
+                        stringStringMap.put("deskripsi" , deskription.getText().toString());
+                        stringStringMap.put("jammulai" , tanggalMulai+" "+jamMulai);
+                        stringStringMap.put("id_user" , tokenSent);
+                        tambahProject(stringStringMap);
+                        dialog.dismiss();
+                    }
+                });
                 // Creating adapter for spinner
                 ArrayAdapter<String> dataAdapter;
                 dataAdapter = new ArrayAdapter<String>(AmbilProfile.this,
@@ -171,7 +214,22 @@ public class AmbilProfile extends AppCompatActivity{
                 dataAdapter = new ArrayAdapter<String>(AmbilProfile.this,
                         R.layout.support_simple_spinner_dropdown_item,
                         manHourss);
-                man_hours.setAdapter(dataAdapter);
+               type_project.setAdapter(new ArrayAdapter<String>(AmbilProfile.this,
+                        R.layout.support_simple_spinner_dropdown_item,typeProject));
+                type_project.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                            if(i == typeProject.size()-1) {
+                                setVisibleOrnot(dialog,false);
+                            }else{
+                                setVisibleOrnot(dialog,true);
+                            }
+                    }
+                    @Override
+                    public void onNothingSelected(AdapterView<?> adapterView) {
+
+                    }
+                });
 
                 final Calendar myCalendar = Calendar.getInstance();
                 setdate.setOnClickListener(new View.OnClickListener() {
@@ -180,7 +238,8 @@ public class AmbilProfile extends AppCompatActivity{
                         DatePickerDialog.OnDateSetListener onDateSetListener = new DatePickerDialog.OnDateSetListener() {
                             @Override
                             public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
-
+                                    tanggalMulai = String.valueOf(i)+"-"+String.valueOf(i1)+"-"
+                                            +String.valueOf(i2);
                             }
                         };
                         new DatePickerDialog(AmbilProfile.this,onDateSetListener,
@@ -195,16 +254,24 @@ public class AmbilProfile extends AppCompatActivity{
                         new TimePickerDialog(AmbilProfile.this, new TimePickerDialog.OnTimeSetListener() {
                             @Override
                             public void onTimeSet(TimePicker timePicker, int i, int i1) {
-
+                                String jam = String.valueOf(i);
+                                String menit = String.valueOf(i1);
+                                if(i < 10){
+                                    jam = "0"+String.valueOf(i);
+                                }
+                                if(i1 < 10){
+                                    menit = "0"+String.valueOf(i1);
+                                }
+                                jamMulai = jam+":"+menit+":00";
                             }
-                        },myCalendar.get(Calendar.HOUR),myCalendar.get(Calendar.MINUTE),true).show();
+                        },myCalendar.get(Calendar.HOUR),myCalendar.get(Calendar.MINUTE),
+                                true).show();
                     }
                 });
 
                 dialog.show();
             }
         });
-        definiton();
 
 
         drawerLayout=(DrawerLayout)findViewById(R.id.drawer_layout_home);
@@ -224,7 +291,6 @@ public class AmbilProfile extends AppCompatActivity{
         Bundle extras=getIntent().getExtras();
 
         tokenSent=extras.getString("tokensent");
-
         SharedPreferences sharedPreferences=getApplicationContext().getSharedPreferences(getString(R.string.Fire_notif), Context.MODE_PRIVATE);
         final String token=sharedPreferences.getString(getString(R.string.Fire_token),"");
 
@@ -255,9 +321,6 @@ public class AmbilProfile extends AppCompatActivity{
         });
 
 
-
-
-        Toast.makeText(this, "NI TOKEN FIREBASE "+token.toString(), Toast.LENGTH_SHORT).show();
 
 
 
@@ -317,6 +380,15 @@ public class AmbilProfile extends AppCompatActivity{
 
     }
 
+    public void setVisibleOrnot(Dialog dialog,boolean visble){
+        if(!visble){
+            man_hours.setVisibility(View.VISIBLE);
+            ((EditText)dialog.findViewById(R.id.t_man_hours)).setVisibility(View.VISIBLE);
+        }else{
+            man_hours.setVisibility(View.GONE);
+            ((EditText)dialog.findViewById(R.id.t_man_hours)).setVisibility(View.GONE);
+        }
+    }
     public void backHandler(){
 
         AlertDialog.Builder alertDialog=new AlertDialog.Builder(
@@ -527,6 +599,7 @@ public class AmbilProfile extends AppCompatActivity{
     }
 
     private void tampilProject(String tokenSent) {
+        data.clear();
         Log.e("ini link ",String.valueOf(RestClient.PROJECTLIST)+tokenSent);
         userku = (TextView) findViewById(R.id.username);
         StringRequest projectlist=new StringRequest(Request.Method.GET,RestClient.PROJECTLIST+tokenSent, new Response.Listener<String>() {
@@ -565,7 +638,6 @@ public class AmbilProfile extends AppCompatActivity{
                         listViewAdapter=new listViewAdapter(AmbilProfile.this,data);
 
                         listViewpro.setAdapter(listViewAdapter);
-                      //  listviewnotif.setAdapter(listViewAdapter);
 
 
 
@@ -739,15 +811,6 @@ public class AmbilProfile extends AppCompatActivity{
                 return params;
             }
 
-//            @Override
-//            protected Map<String, String> getParams(){
-//
-//                Map<String, String> params=new HashMap<String, String>();
-//               // params.put("username",uname.getText().toString());
-//               // params.put("password",pwd.getText().toString());
-//                return params;
-//            }
-
 
         }; projectnotif.setRetryPolicy(new DefaultRetryPolicy(
                 3000,
@@ -757,4 +820,37 @@ public class AmbilProfile extends AppCompatActivity{
 
         Volley.newRequestQueue(getApplicationContext()).add(projectnotif);
     }
+
+    public void tambahProject(final Map<String,String> stringStringMap){
+        StringRequest stringRequest = new StringRequest(Request.Method.POST,
+                RestClient.TAMBAH_PROJECT, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                tampilProject(tokenSent);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(AmbilProfile.this, "error "+error.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        }){
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String,String> params=new HashMap<>();
+                String credentials = "PHASAR"+":"+"newstartupfromkampusuad";
+                String auth = "Basic "+ Base64.encodeToString(credentials.getBytes(), Base64.NO_WRAP);
+                params.put("Authorization", auth);
+                params.put("X-API-KEY",RestClient.X_API_KEY);
+                return params;
+            }
+
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+
+                return stringStringMap;
+            }
+        };
+        Volley.newRequestQueue(this).add(stringRequest);
+    }
+    
 }

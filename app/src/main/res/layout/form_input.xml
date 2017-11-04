@@ -33,23 +33,28 @@
         android:text="Type Your Project"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
-    <EditText
+    <Spinner
+        android:layout_marginBottom="10dp"
         android:layout_below="@+id/t_type_your_projet"
         android:id="@+id/input_type_project"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-    <TextView
+        android:layout_height="wrap_content"></Spinner>
+    <EditText
+        android:visibility="gone"
         android:id="@+id/t_man_hours"
         android:layout_below="@+id/input_type_project"
-        android:layout_width="wrap_content"
-        android:text="Man Hours"
+        android:layout_width="match_parent"
+        android:hint="Jenis Project"
         android:layout_height="wrap_content" />
-    <Spinner
+    <EditText
+        android:visibility="gone"
+        android:hint="Man Hours"
         android:layout_below="@+id/t_man_hours"
         android:id="@+id/spiner_man_hours"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"></Spinner>
+        android:layout_height="wrap_content"></EditText>
     <TextView
+        android:visibility="gone"
         android:id="@+id/bla"
         android:layout_below="@id/spiner_man_hours"
         android:layout_width="wrap_content"
@@ -59,6 +64,7 @@
     <EditText
         android:id="@+id/input_or_type"
         android:layout_below="@+id/bla"
+        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
        <TextView
