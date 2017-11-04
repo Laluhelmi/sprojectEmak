@@ -34,6 +34,7 @@ public class RestClient {
     public static final String EDIT_PROFILE=API+"app/edit_profile/";
     public static final String API_PROFILE_CEK=API+"profile/";
     public static final String TAMBAH_PROJECT = API+"app/tambahprojek";
+    public static final String getProdukType = API+"app/getProjectType";
     public static final String KEY_X_AUTH_LOGIN = "x-auth-login";
     public static final String KEY_TOKEN = "token";
 

@@ -74,13 +74,12 @@ public class AmbilProfile extends AppCompatActivity{
     int id;
     String tokenSent,myuser;
     private ImageView imageViewRound;
-
     ArrayList<BeanClassForListView> data = new ArrayList<>();
-
     ArrayList<BeanClassForNotif> datanotif;
-
     DetailNotifAdapter notifAdapter;
     listViewAdapter listViewAdapter=null;
+    private List<String>produkJenis = new ArrayList<>();
+    private List<String>getProdukJenisId = new ArrayList<>();
 
     ArrayAdapter<String> adapter;
     String[] listku,deskripsipro,listkunotif,deskripsinotif;
@@ -150,18 +149,6 @@ public class AmbilProfile extends AppCompatActivity{
                 manHourss.add("28 man");
                 manHourss.add("36 man");
 
-                final List<String> typeProject = new ArrayList<>();
-                typeProject.add("web profil");
-                typeProject.add("mobile android");
-                typeProject.add("sistem penerimaan siswa baru");
-                typeProject.add("iphone");
-                typeProject.add("toko buku offline");
-                typeProject.add("sistem informasi");
-                typeProject.add("sistem boking tikets bioskop");
-                typeProject.add("pemesanan");
-                typeProject.add("Lainnya");
-
-
                 input_name      = (EditText)dialog.findViewById(R.id.input);
                 type_project    = (Spinner)dialog.findViewById(R.id.input_type_project);
                 input_or_type   = (EditText)dialog.findViewById(R.id.input_or_type);
@@ -186,7 +173,7 @@ public class AmbilProfile extends AppCompatActivity{
                         stringStringMap.put("judul",input_name.getText().toString());
 
                         if( type_project.getSelectedItem().toString() != "Lainnya")
-                            stringStringMap.put("jenis",  String.valueOf(type_project.getSelectedItemPosition()+1));
+                            stringStringMap.put("jenis",  getProdukJenisId.get(type_project.getSelectedItemPosition()));
                         else{
                             stringStringMap.put("man_hours",man_hours.getText().toString());
                             String jenis = ((EditText)dialog.findViewById(R.id.t_man_hours)).getText().toString();
@@ -214,22 +201,7 @@ public class AmbilProfile extends AppCompatActivity{
                 dataAdapter = new ArrayAdapter<String>(AmbilProfile.this,
                         R.layout.support_simple_spinner_dropdown_item,
                         manHourss);
-               type_project.setAdapter(new ArrayAdapter<String>(AmbilProfile.this,
-                        R.layout.support_simple_spinner_dropdown_item,typeProject));
-                type_project.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                    @Override
-                    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                            if(i == typeProject.size()-1) {
-                                setVisibleOrnot(dialog,false);
-                            }else{
-                                setVisibleOrnot(dialog,true);
-                            }
-                    }
-                    @Override
-                    public void onNothingSelected(AdapterView<?> adapterView) {
-
-                    }
-                });
+                getProdukJenis(dialog);
 
                 final Calendar myCalendar = Calendar.getInstance();
                 setdate.setOnClickListener(new View.OnClickListener() {
@@ -852,5 +824,62 @@ public class AmbilProfile extends AppCompatActivity{
         };
         Volley.newRequestQueue(this).add(stringRequest);
     }
-    
+    public void getProdukJenis(final Dialog dialog){
+        produkJenis = new ArrayList<>();
+        getProdukJenisId = new ArrayList<>();
+        StringRequest stringRequest = new StringRequest(RestClient.getProdukType,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try{
+                            JSONObject jsonObject = new JSONObject(response);
+                            JSONArray jsonArray = jsonObject.getJSONArray("pesan");
+                            for(int i =0 ;i< jsonArray.length();i++){
+                                JSONObject object = jsonArray.getJSONObject(i);
+                                getProdukJenisId.add(object.getString("id_jenisproyek"));
+                                produkJenis.add(object.getString("nama_jenisproyek"));
+                            }
+
+                            produkJenis.add(produkJenis.size(),"Lainnya");
+                            type_project.setAdapter(new ArrayAdapter<String>(AmbilProfile.this,
+                                    R.layout.support_simple_spinner_dropdown_item,produkJenis));
+                            type_project.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                                @Override
+                                public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                                    if(i == produkJenis.size()-1) {
+                                        setVisibleOrnot(dialog,false);
+                                    }else{
+                                        setVisibleOrnot(dialog,true);
+                                    }
+                                }
+                                @Override
+                                public void onNothingSelected(AdapterView<?> adapterView) {
+
+                                }
+                            });
+
+                        }catch (Exception e){
+                            e.printStackTrace();
+                        }
+
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        }){
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String,String> params=new HashMap<>();
+                String credentials = "PHASAR"+":"+"newstartupfromkampusuad";
+                String auth = "Basic "+ Base64.encodeToString(credentials.getBytes(), Base64.NO_WRAP);
+                params.put("Authorization", auth);
+                params.put("X-API-KEY",RestClient.X_API_KEY);
+                return params;
+            }
+        };
+        Volley.newRequestQueue(this).add(stringRequest);
+    }
+
 }
