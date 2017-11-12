@@ -340,7 +340,8 @@ public class AmbilProfile extends AppCompatActivity{
 
                 drawerLayout.openDrawer(Gravity.LEFT);
                 return true;
-
+            case R.id.bantuan :
+                startActivity(new Intent(getApplicationContext(),Bantuan.class));
         }
         return super.onOptionsItemSelected(item);
     }

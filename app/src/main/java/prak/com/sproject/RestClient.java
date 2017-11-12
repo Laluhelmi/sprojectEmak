@@ -21,7 +21,7 @@ public class RestClient {
 //    public static final String API = "http://posmikro.com/register.php";
 //    public static final String API = "http://192.168.43.105/posmikro/";
 //    public static final String API = "http://scrumproject.16mb.com/";
-    public static final String API = "http://192.168.2.219/sproject/scrumapi/index.php/";
+    public static final String API = "http://192.168.43.219/sproject/scrumapi/index.php/";
     public static final String X_AUTH = "ad8ab9dc1a769dfad03f5a98d7f8b9349f75cca2";
     public static final String KEY_X_AUTH = "x-auth";
     public static final String X_API_KEY="tifuad";

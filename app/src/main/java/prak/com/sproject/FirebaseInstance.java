@@ -19,7 +19,6 @@ public class FirebaseInstance extends FirebaseInstanceIdService {
     public void onTokenRefresh() {
         String recent_token= FirebaseInstanceId.getInstance().getToken();
         Log.d("SIAAAAAAAAAAL", "Refreshed token: " + recent_token);
-        Toast.makeText(this, "Refreshed token"+recent_token, Toast.LENGTH_SHORT).show();
         SharedPreferences sharedPreferences=getApplicationContext().getSharedPreferences(getString(R.string.Fire_notif), Context.MODE_PRIVATE);
         SharedPreferences.Editor editor=sharedPreferences.edit();
         editor.putString(getString(R.string.Fire_token),recent_token);
